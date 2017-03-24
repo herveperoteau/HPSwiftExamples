@@ -12,6 +12,8 @@
 		0976D6AF1E831FF800A9923E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0976D6AD1E831FF800A9923E /* Main.storyboard */; };
 		0976D6B11E831FF800A9923E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0976D6B01E831FF800A9923E /* Assets.xcassets */; };
 		0976D6B41E831FF800A9923E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0976D6B21E831FF800A9923E /* LaunchScreen.storyboard */; };
+		0976D6C61E85CB3300A9923E /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0976D6BC1E85CA1B00A9923E /* RxCocoa.framework */; };
+		0976D6C71E85CB3300A9923E /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0976D6BD1E85CA1B00A9923E /* RxSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		0976D6B01E831FF800A9923E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0976D6B31E831FF800A9923E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0976D6B51E831FF800A9923E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0976D6BC1E85CA1B00A9923E /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		0976D6BD1E85CA1B00A9923E /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0976D6C61E85CB3300A9923E /* RxCocoa.framework in Frameworks */,
+				0976D6C71E85CB3300A9923E /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +46,7 @@
 			children = (
 				0976D6A81E831FF800A9923E /* UITableViewRxQuiz */,
 				0976D6A71E831FF800A9923E /* Products */,
+				0976D6BB1E85CA1B00A9923E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +71,15 @@
 			path = UITableViewRxQuiz;
 			sourceTree = "<group>";
 		};
+		0976D6BB1E85CA1B00A9923E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0976D6BC1E85CA1B00A9923E /* RxCocoa.framework */,
+				0976D6BD1E85CA1B00A9923E /* RxSwift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,6 +90,7 @@
 				0976D6A21E831FF800A9923E /* Sources */,
 				0976D6A31E831FF800A9923E /* Frameworks */,
 				0976D6A41E831FF800A9923E /* Resources */,
+				0976D6C01E85CA5100A9923E /* Run Script Carthage */,
 			);
 			buildRules = (
 			);
@@ -131,6 +148,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0976D6C01E85CA5100A9923E /* Run Script Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+			);
+			name = "Run Script Carthage";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0976D6A21E831FF800A9923E /* Sources */ = {
@@ -260,6 +296,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = E536PJHTHJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = UITableViewRxQuiz/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.UITableViewRxQuiz;
@@ -273,6 +313,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = E536PJHTHJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = UITableViewRxQuiz/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.UITableViewRxQuiz;
