@@ -37,11 +37,10 @@ final class ChoiceCell: UITableViewCell {
   }
   
   private func layoutCell() {
-    titleLabel.text = choiceModel?.title    
+    titleLabel.text = choiceModel?.title
     if let choice = choiceModel, displayAnswers {
-      // TODO: WTF ???
-      checkboxImageView.tintColor  = isSelected ? choice.valid ? greenColor : redColor : choice.valid ? greenColor : .black
-      checkmarkImageView.tintColor = isSelected ? choice.valid ? greenColor : redColor : .black
+      checkmarkImageView.tintColor = (isSelected == choice.valid ? greenColor : redColor)
+      checkboxImageView.tintColor = (isSelected == choice.valid ? greenColor : redColor)
     }
     else {
       checkboxImageView.tintColor  = .black
