@@ -12,6 +12,8 @@
 		098F88211E8704A50029424E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 098F881F1E8704A50029424E /* Main.storyboard */; };
 		098F88231E8704A50029424E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 098F88221E8704A50029424E /* Assets.xcassets */; };
 		098F88261E8704A50029424E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 098F88241E8704A50029424E /* LaunchScreen.storyboard */; };
+		098F88301E8705A40029424E /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 098F882E1E8705A40029424E /* RxCocoa.framework */; };
+		098F88311E8705A40029424E /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 098F882F1E8705A40029424E /* RxSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		098F88221E8704A50029424E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		098F88251E8704A50029424E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		098F88271E8704A50029424E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		098F882E1E8705A40029424E /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		098F882F1E8705A40029424E /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				098F88301E8705A40029424E /* RxCocoa.framework in Frameworks */,
+				098F88311E8705A40029424E /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +46,7 @@
 			children = (
 				098F881A1E8704A50029424E /* LoginRxMvvm */,
 				098F88191E8704A50029424E /* Products */,
+				098F882D1E8705A40029424E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +71,15 @@
 			path = LoginRxMvvm;
 			sourceTree = "<group>";
 		};
+		098F882D1E8705A40029424E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				098F882E1E8705A40029424E /* RxCocoa.framework */,
+				098F882F1E8705A40029424E /* RxSwift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,6 +90,8 @@
 				098F88141E8704A50029424E /* Sources */,
 				098F88151E8704A50029424E /* Frameworks */,
 				098F88161E8704A50029424E /* Resources */,
+				098F88321E8705CE0029424E /* Run Script Carthage */,
+				098F88331E8706080029424E /* Run Script TODO: FIXEME Warnings */,
 			);
 			buildRules = (
 			);
@@ -131,6 +149,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		098F88321E8705CE0029424E /* Run Script Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+			);
+			name = "Run Script Carthage";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		098F88331E8706080029424E /* Run Script TODO: FIXEME Warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script TODO: FIXEME Warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		098F88141E8704A50029424E /* Sources */ = {
@@ -260,6 +311,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = E536PJHTHJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = LoginRxMvvm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.LoginRxMvvm;
@@ -273,6 +328,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = E536PJHTHJ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = LoginRxMvvm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.LoginRxMvvm;
