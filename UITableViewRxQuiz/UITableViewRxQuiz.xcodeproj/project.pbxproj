@@ -138,6 +138,7 @@
 				0976D6A31E831FF800A9923E /* Frameworks */,
 				0976D6A41E831FF800A9923E /* Resources */,
 				0976D6C01E85CA5100A9923E /* Run Script Carthage */,
+				0955E5371E86E4D8009EA5CF /* TODO: FIXME: Warnings */,
 			);
 			buildRules = (
 			);
@@ -198,6 +199,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0955E5371E86E4D8009EA5CF /* TODO: FIXME: Warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "TODO: FIXME: Warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
 		0976D6C01E85CA5100A9923E /* Run Script Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -396,6 +411,7 @@
 				0976D6BA1E831FF800A9923E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
