@@ -14,15 +14,38 @@ final class ChoiceCell: UITableViewCell {
   @IBOutlet weak var checkboxImageView: UIImageView!
   @IBOutlet weak var checkmarkImageView: UIImageView!
   
-  override func awakeFromNib() {
-    super.awakeFromNib()
-    // Initialization code
+  private let redColor   = UIColor(red: 231 / 255, green: 76 / 255, blue: 60 / 255, alpha: 1)
+  private let greenColor = UIColor(red: 46 / 255, green: 204 / 255, blue: 113 / 255, alpha: 1)
+  
+  var choiceModel: ChoiceModel? {
+    didSet {
+      layoutCell()
+    }
   }
   
-  override func setSelected(_ selected: Bool, animated: Bool) {
-    super.setSelected(selected, animated: animated)
-    
-    // Configure the view for the selected state
+  override var isSelected: Bool {
+    didSet {
+      checkmarkImageView.isHidden = !isSelected
+      layoutCell()
+    }
   }
   
+  var displayAnswers: Bool = false {
+    didSet {
+      layoutCell()
+    }
+  }
+  
+  private func layoutCell() {
+    titleLabel.text = choiceModel?.title    
+    if let choice = choiceModel, displayAnswers {
+      // TODO: WTF ???
+      checkboxImageView.tintColor  = isSelected ? choice.valid ? greenColor : redColor : choice.valid ? greenColor : .black
+      checkmarkImageView.tintColor = isSelected ? choice.valid ? greenColor : redColor : .black
+    }
+    else {
+      checkboxImageView.tintColor  = .black
+      checkmarkImageView.tintColor = .black
+    }
+  }
 }
