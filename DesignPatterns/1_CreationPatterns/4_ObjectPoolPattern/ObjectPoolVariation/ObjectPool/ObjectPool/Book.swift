@@ -23,3 +23,9 @@ class Book : PoolItem {
         }
     }
 }
+
+extension Book: CustomStringConvertible  {
+  var description: String {
+    return "author:\(author), stockNumber:\(stockNumber), checkoutCount:\(checkoutCount)"
+  }
+}
