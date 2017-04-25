@@ -36,7 +36,8 @@ class BurgerBuilder {
             pickles: pickles, mayo: mayo, ketchup: ketchup,
             lettuce: lettuce, cook: cooked, bacon: bacon);
     }
-    
+  
+    // Use Factory Method Pattern to create builder
     class func getBuilder(_ burgerType:Burgers) -> BurgerBuilder {
         var builder:BurgerBuilder;
         switch (burgerType) {
