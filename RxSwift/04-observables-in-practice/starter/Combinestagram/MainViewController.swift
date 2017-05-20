@@ -36,7 +36,7 @@ class MainViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // RX Subscribe to images update
+    // RX Subscribe to update preview
     images.asObservable()
       .subscribe(
         onNext: { [weak self] photos in
@@ -45,8 +45,22 @@ class MainViewController: UIViewController {
                                           size: preview.frame.size)
       })
       .addDisposableTo(bag)
+    
+    // RX Subscribe to update buttons UI
+    images.asObservable()
+      .subscribe(onNext: { [weak self] photos in
+        self?.updateUI(photos: photos)
+      })
+      .addDisposableTo(bag)
   }
 
+  private func updateUI(photos: [UIImage]) {
+    buttonSave.isEnabled = photos.count > 0 && photos.count % 2 == 0
+    buttonClear.isEnabled = photos.count > 0
+    itemAdd.isEnabled = photos.count < 6
+    title = photos.count > 0 ? "\(photos.count) photos" : "Collage"
+  }
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
   }
