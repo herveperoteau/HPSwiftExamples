@@ -24,15 +24,27 @@ import UIKit
 import RxSwift
 
 class MainViewController: UIViewController {
-
+  
   @IBOutlet weak var imagePreview: UIImageView!
   @IBOutlet weak var buttonClear: UIButton!
   @IBOutlet weak var buttonSave: UIButton!
   @IBOutlet weak var itemAdd: UIBarButtonItem!
+  
+  private let bag = DisposeBag()
+  private let images = Variable<[UIImage]>([])
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    
+    // RX Subscribe to images update
+    images.asObservable()
+      .subscribe(
+        onNext: { [weak self] photos in
+          guard let preview = self?.imagePreview else { return }
+          preview.image = UIImage.collage(images: photos,
+                                          size: preview.frame.size)
+      })
+      .addDisposableTo(bag)
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -40,14 +52,15 @@ class MainViewController: UIViewController {
   }
 
   @IBAction func actionClear() {
-
+    images.value = []
   }
 
   @IBAction func actionSave() {
   }
 
   @IBAction func actionAdd() {
-
+    
+    images.value.append(UIImage(named: "IMG_1907.jpg")!)
   }
 
   func showMessage(_ title: String, description: String? = nil) {
