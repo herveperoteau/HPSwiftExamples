@@ -32,7 +32,33 @@ example(of: "Challenge 1") {
   let input = PublishSubject<Int>()
 
   // Add your code here
+    
+  input
+    // 1. Phone numbers can’t begin with 0 — use skipWhile.
+    .skipWhile {  $0 == 0 }
+//    Each input must be a single-digit number — use filter to only allow elements
+//    that are less than 10.
+    .filter { $0 < 10 }
+//    3. Limiting this example to U.S. phone numbers, which are 10 digits, take only the
+//    first 10 numbers input — use take and toArray.
+    .take(10)
+    .toArray()
+    .subscribe {
+        if let digits = $0.element {
+            let phone = phoneNumber(from: digits)
+            print("\(phone)")
 
+            if let contact = contacts[phone] {
+                print("Dialing \(contact) (\(phone))...")
+            } else {
+                print("Contact not found")
+            }
+        }
+        else {
+            print ("Event:\($0)")
+        }
+    }
+    .addDisposableTo(disposeBag)
 
   input.onNext(0)
   input.onNext(603)
@@ -41,7 +67,7 @@ example(of: "Challenge 1") {
   input.onNext(1)
 
   // Confirm that 7 results in "Contact not found", and then change to 2 and confirm that Junior is found
-  input.onNext(7)
+  input.onNext(2)
 
   "5551212".characters.forEach {
     if let number = (Int("\($0)")) {
@@ -50,6 +76,7 @@ example(of: "Challenge 1") {
   }
 
   input.onNext(9)
+    input.onCompleted()
 }
 
 /*:
