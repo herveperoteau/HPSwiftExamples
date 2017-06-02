@@ -70,7 +70,11 @@ class ActivityController: UITableViewController {
     }
     
     func refresh() {
-        fetchEvents(repo: repo)
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let sSelf = self else { return }
+            //sSelf.fetchEvents(repo: sSelf.repo)
+            sSelf.fetchTrendingRepoChallenge2()
+        }
     }
     
     func fetchEvents(repo: String) {
@@ -87,6 +91,7 @@ class ActivityController: UITableViewController {
                 return request
             }
             .flatMap { request -> Observable<(HTTPURLResponse, Data)> in // --- call API async
+                print("main: \(Thread.isMainThread)")
                 return URLSession.shared.rx.response(request: request)
             }
             .shareReplay(1) // --- prevent subscribe after result of request
@@ -94,6 +99,7 @@ class ActivityController: UITableViewController {
        // Subscription to parse result of request
        response
             .filter { response, _ in // --- filtering error (Operator ~= check if statusCode is in range 200 .. 300)
+                print("filter main: \(Thread.isMainThread)")
                 return 200..<300 ~= response.statusCode
             }
             .map { _, data -> [[String: Any]] in  // --- transform data in JSON
@@ -109,6 +115,7 @@ class ActivityController: UITableViewController {
                 return objects.flatMap(Event.init)
             }
             .subscribe(onNext: { [weak self] newEvents in  // --- Subscribe to update UI
+                print("onNext main: \(Thread.isMainThread)")
                 self?.processEvents(newEvents)
             })
             .addDisposableTo(bag)
@@ -131,26 +138,80 @@ class ActivityController: UITableViewController {
             })
             .addDisposableTo(bag)
     }
+
+    func fetchTrendingRepoChallenge2() {
+
+        // First Call API (top Trending Repos)
+        let urlTopTrending = "https://api.github.com/search/repositories?q=language:swift&per_page=5"
+        let topTrendingRepos = Observable.from([urlTopTrending])
+            .map { urlString -> URL in  // --- transform string to url
+                return URL(string: urlString)!
+            }
+            .map { url -> URLRequest in // --- transform url to urlRequest
+                return URLRequest(url: url)
+            }
+            .flatMap { request -> Observable<Any> in // --- call API async and return JSON
+                print("main: \(Thread.isMainThread)")
+                return URLSession.shared.rx.json(request: request)
+            }
+            .flatMap { jsonData -> Observable<String> in  // --- [flatMap to convert JSON to list of repo names, and create Observable from that list]
+                guard
+                    let json = jsonData as? [String:Any],
+                    let items = json["items"] as? Array<Any>
+                else {
+                    return Observable.never()
+                }
+ 
+                let repos = items.flatMap { item -> String? in
+                    guard
+                        let dico = item as? [String:Any],
+                        let repoName = dico["full_name"] as? String
+                        else {
+                            return nil
+                    }
+                    
+                    return repoName
+                }
+                return Observable.from(repos)
+            }
+            .shareReplay(1) // --- prevent subscribe after result of request
+
+        // Subscribe to get event from repos
+        topTrendingRepos
+            .subscribe(onNext: { [weak self] repo in
+                self?.fetchEvents(repo: repo)
+            })
+            .addDisposableTo(bag)
+        
+        // Subscribe to display the top repos
+        topTrendingRepos
+            .subscribe(onNext: { repos in
+                print(repos)
+            })
+            .addDisposableTo(bag)
+    }
     
     func processEvents(_ newEvents: [Event]) {
+
+        var updatedEvents = newEvents + events.value
+       
+        /*
+        if updatedEvents.count > 50 {
+            updatedEvents = Array<Event>(updatedEvents.prefix(upTo: 50))
+        }
+ */
         
+        events.value = updatedEvents
+
+        // persist on disk in a plist file
+        let eventsArray = updatedEvents.map{ $0.dictionary } as NSArray
+        eventsArray.write(to: eventsFileURL, atomically: true)
+
+        // refresh UI
         DispatchQueue.main.async { [weak self] in
-            
             guard let sSelf = self else { return }
-            
-            var updatedEvents = newEvents + sSelf.events.value
-            if updatedEvents.count > 50 {
-                updatedEvents = Array<Event>(updatedEvents.prefix(upTo: 50))
-            }
-            
-            sSelf.events.value = updatedEvents
-            
             sSelf.refreshControl?.endRefreshing()
             sSelf.tableView.reloadData()
-            
-            // persist on disk in a plist file
-            let eventsArray = updatedEvents.map{ $0.dictionary } as NSArray
-            eventsArray.write(to: sSelf.eventsFileURL, atomically: true)
         }
     }
     
