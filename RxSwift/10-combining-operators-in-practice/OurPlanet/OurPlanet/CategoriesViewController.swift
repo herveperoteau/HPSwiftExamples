@@ -47,21 +47,37 @@ class CategoriesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func startDownload() {
+    
         let eoCategories = EONET.categories
-        let downloadedEvents = EONET.events(forLast: 360)
         
-        // Combine the result of the 2 requests (Category + Events) to update the category model with associated events
-        let updatedCategories = Observable.combineLatest(eoCategories, downloadedEvents) {
-            (categories, events) -> [EOCategory] in
-            return categories.map { category in
-                var cat = category
-                cat.events = events.filter {
-                    $0.categories.contains(category.id)
+        // C'EST QUAND MEME IMBITABLE TOUTE CETTE SUCCESSION DE FLATMAP, MERGE, FLATMAP, SCAN, !!!! 
+        
+        // Pour chaque categorie, on appelle l'api Events
+        let downloadedEvents = eoCategories.flatMap { categories in
+            // for each categories, call API to load the events of it
+            return Observable.from(categories.map { category in
+                EONET.events(forLast: 360, category: category)
+            })
+            }
+            .merge(maxConcurrent: 2) // prevent too much simultaneous requests
+        
+        // update category with events
+        let updatedCategories = eoCategories.flatMap { categories in
+            downloadedEvents.scan(categories) { updated, events in
+                return updated.map { category in
+                    let eventsForCategory = EONET.filteredEvents(events: events,
+                                                                 forCategory: category)
+                    if !eventsForCategory.isEmpty {
+                        var cat = category
+                        cat.events = cat.events + eventsForCategory
+                        return cat
+                    }
+                    return category
                 }
-                return cat
             }
         }
         
+        // Concat all updatesCategories & BindTo Variable categories
         eoCategories
             .concat(updatedCategories)
             .bindTo(categories)

@@ -48,9 +48,9 @@ class EONET {
             .shareReplay(1)
     }()
     
-    static func events(forLast days: Int = 360) -> Observable<[EOEvent]> {
-        let openEvents = events(forLast: days, closed: false)
-        let closedEvents = events(forLast: days, closed: true)
+    static func events(forLast days: Int = 360, category: EOCategory) -> Observable<[EOEvent]> {
+        let openEvents = events(forLast: days, closed: false, endpoint:category.endpoint)
+        let closedEvents = events(forLast: days, closed: true, endpoint:category.endpoint)
         //        return openEvents.concat(closedEvents)
         return Observable.of(openEvents, closedEvents)
             .merge()
@@ -60,17 +60,19 @@ class EONET {
         
     }
     
-    fileprivate static func events(forLast days: Int, closed: Bool) -> Observable<[EOEvent]> {
-        return
-            request(endpoint: eventsEndpoint,
-                    query: ["days": NSNumber(value: days),
-                            "status": (closed ? "closed" : "open")])
-                .map { json in
+    fileprivate static func events(forLast days: Int, closed: Bool, endpoint:String) -> Observable<[EOEvent]> {
+        
+        let result =
+            request(endpoint: endpoint,
+                    query: ["days": NSNumber(value: days), "status": (closed ? "closed" : "open")])
+                .map { json -> [EOEvent] in
                     guard let raw = json["events"] as? [[String: Any]] else {
-                        throw EOError.invalidJSON(eventsEndpoint)
+                        throw EOError.invalidJSON(endpoint)
                     }
                     return raw.flatMap(EOEvent.init)
-        }
+                }
+        
+        return result
     }
     
     static func filteredEvents(events: [EOEvent], forCategory category: EOCategory) -> [EOEvent] {
@@ -86,6 +88,8 @@ class EONET {
     static func request(endpoint: String, query: [String: Any] = [:]) -> Observable<[String: Any]> {
         
         do {
+            print("request: endpoint=\(endpoint) ...")
+
             // create URL
             guard
                 let url = URL(string: API)?.appendingPathComponent(endpoint),
@@ -106,6 +110,7 @@ class EONET {
             }
             
             // Call API in Rx
+            print("url:\(finalURL) ...")
             let request = URLRequest(url: finalURL)
             return URLSession.shared.rx.response(request: request)
                 .map { _, data -> [String: Any] in
