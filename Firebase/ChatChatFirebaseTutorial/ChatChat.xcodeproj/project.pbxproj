@@ -32,6 +32,7 @@
 		45A0D8FD1D49508800F26729 /* CreateChannelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelCell.swift; sourceTree = "<group>"; };
 		45A0D9001D4BB5E900F26729 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		45B210361D3B740700DB4827 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B20184811F23B0020013E702 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BB1E97061C147BAA00E34853 /* ChatChat-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ChatChat-Bridging-Header.h"; sourceTree = "<group>"; };
 		BB5355761BEF765800321277 /* ChatChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB5355791BEF765800321277 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		BB5355911BEF817A00321277 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B20184811F23B0020013E702 /* GoogleService-Info.plist */,
 				BB1E97061C147BAA00E34853 /* ChatChat-Bridging-Header.h */,
 				BB5355791BEF765800321277 /* AppDelegate.swift */,
 				459780D21D6465FB007BE66F /* UIImage+Gif.swift */,
@@ -184,7 +186,7 @@
 				TargetAttributes = {
 					BB5355751BEF765800321277 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 7D49XT3VJJ;
+						DevelopmentTeam = E536PJHTHJ;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -409,9 +411,10 @@
 				CODE_SIGN_ENTITLEMENTS = ChatChat/ChatChat.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = E536PJHTHJ;
 				INFOPLIST_FILE = ChatChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.telliott.rwchitchat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.rwchitchat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ChatChat/ChatChat-Bridging-Header.h";
@@ -430,9 +433,10 @@
 				CODE_SIGN_ENTITLEMENTS = ChatChat/ChatChat.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = E536PJHTHJ;
 				INFOPLIST_FILE = ChatChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.telliott.rwchitchat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peroteau.herve.rwchitchat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ChatChat/ChatChat-Bridging-Header.h";

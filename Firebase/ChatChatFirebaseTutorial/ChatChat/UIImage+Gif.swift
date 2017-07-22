@@ -13,7 +13,7 @@ extension UIImage {
 
     public class func gifWithData(_ data: Data) -> UIImage? {
         // Create source from data
-        guard let source = CGImageSourceCreateWithData(data, nil) else {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             print("SwiftGif: Source for the image does not exist")
             return nil
         }
@@ -23,14 +23,14 @@ extension UIImage {
 
     public class func gifWithURL(_ gifUrl:String) -> UIImage? {
         // Validate URL
-        guard let bundleURL:URL? = URL(string: gifUrl)
+        guard let bundleURL:URL = URL(string: gifUrl)
             else {
                 print("SwiftGif: This image named \"\(gifUrl)\" does not exist")
                 return nil
         }
 
         // Validate data
-        guard let imageData = try? Data(contentsOf: bundleURL!) else {
+        guard let imageData = try? Data(contentsOf: bundleURL) else {
             print("SwiftGif: Cannot turn image named \"\(gifUrl)\" into NSData")
             return nil
         }
@@ -61,18 +61,17 @@ extension UIImage {
         // Get dictionaries
         let cfProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil)
         let gifProperties: CFDictionary = unsafeBitCast(
-            CFDictionaryGetValue(cfProperties,
-                unsafeAddress(of: kCGImagePropertyGIFDictionary)),
+            CFDictionaryGetValue(cfProperties, UnsafeMutableRawPointer(Unmanaged.passUnretained(kCGImagePropertyGIFDictionary).toOpaque())),
             to: CFDictionary.self)
 
         // Get delay time
         var delayObject: AnyObject = unsafeBitCast(
             CFDictionaryGetValue(gifProperties,
-                unsafeAddress(of: kCGImagePropertyGIFUnclampedDelayTime)),
+                Unmanaged.passUnretained(kCGImagePropertyGIFUnclampedDelayTime).toOpaque()),
             to: AnyObject.self)
         if delayObject.doubleValue == 0 {
             delayObject = unsafeBitCast(CFDictionaryGetValue(gifProperties,
-                unsafeAddress(of: kCGImagePropertyGIFDelayTime)), to: AnyObject.self)
+                Unmanaged.passUnretained(kCGImagePropertyGIFDelayTime).toOpaque()), to: AnyObject.self)
         }
 
         delay = delayObject as! Double
@@ -99,7 +98,7 @@ extension UIImage {
         }
 
         // Swap for modulo
-        if a < b {
+        if a! < b! {
             let c = a
             a = b
             b = c
