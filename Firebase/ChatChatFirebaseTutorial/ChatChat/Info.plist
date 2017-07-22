@@ -42,5 +42,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Pour envoyer des photos dans les conversations</string>
 </dict>
 </plist>
