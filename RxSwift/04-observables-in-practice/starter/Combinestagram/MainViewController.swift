@@ -71,6 +71,18 @@ class MainViewController: UIViewController {
   }
 
   @IBAction func actionSave() {
+    
+    guard let image = imagePreview.image else { return }
+    PhotoWriter.save(image)
+      .subscribe(
+        onError: { [weak self] error in
+          self?.showMessage("Error", description: error.localizedDescription)
+        },
+        onCompleted: { [weak self] in
+          self?.showMessage("Saved")
+          self?.actionClear()
+      })
+      .addDisposableTo(bag)
   }
 
   @IBAction func actionAdd() {
@@ -94,8 +106,10 @@ class MainViewController: UIViewController {
   }
 
   func showMessage(_ title: String, description: String? = nil) {
-    let alert = UIAlertController(title: title, message: description, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: { [weak self] _ in self?.dismiss(animated: true, completion: nil)}))
-    present(alert, animated: true, completion: nil)
+    alert(title: title, text: description)
+      .subscribe(onNext: { [weak self] in
+        self?.dismiss(animated: true, completion: nil)
+      })
+      .addDisposableTo(bag)
   }
 }
